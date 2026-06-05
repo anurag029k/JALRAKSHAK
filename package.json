@@ -1,0 +1,25 @@
+{
+  "name": "jalrakshak",
+  "version": "1.0.0",
+  "description": "Real-Time Survey & Monitoring of Water Bodies in Delhi - SIH 2024",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:ai": "cd ai-module && uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ../ai-module && pip install -r requirements.txt",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build"
+  },
+  "keywords": [
+    "water-monitoring",
+    "gis",
+    "delhi",
+    "sih2024"
+  ],
+  "author": "SIH 2024 Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
