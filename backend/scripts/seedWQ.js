@@ -12,13 +12,13 @@ function generateYrWiseData(waterBodies){
        for(let year = 2020; year<=2026; year++){
         const quality = {
            // Realistic environmental ranges
-           do: randomBetween(3, 12),                 // mg/L
+           do: randomBetween(5, 9),                 // mg/L
            ph: randomBetween(6.5, 8.8),              // pH
-           bod: randomBetween(1, 15),                // mg/L
+           bod: randomBetween(1, 6),                // mg/L
            nitrate: randomBetween(0.5, 40),          // mg/L
            fecalColiform: Math.floor(randomBetween(50, 5000, 0)),
-           totalColiform: Math.floor(randomBetween(100, 10000, 0)),
-           temperature: randomBetween(15, 38),       // °C
+           totalColiform: Math.floor(randomBetween(100, 3000, 0)),
+           temperature: randomBetween(18, 35),       // °C
            turbidity: randomBetween(1, 100),         // NTU
            conductivity: randomBetween(100, 2000),   // µS/cm
         }

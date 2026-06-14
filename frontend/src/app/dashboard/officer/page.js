@@ -104,7 +104,7 @@ export default function OfficerDashboard() {
 
         {/* Officer Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/surveys/new')}>
+          {/* <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/surveys/new')}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,7 +116,7 @@ export default function OfficerDashboard() {
             <CardContent>
               <p className="text-sm text-gray-600">Conduct a new water body survey</p>
             </CardContent>
-          </Card>
+          </Card> */}
 
           <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/surveys')}>
             <CardHeader>

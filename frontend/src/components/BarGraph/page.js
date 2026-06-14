@@ -88,11 +88,18 @@ export default function BarGraph({ waterBodyId }) {
     fetchTrend();
   }, [waterBodyId]);
 
+  // const getBarColor = (healthScore) => {
+  //   if (healthScore >= 70) return "#22c55e"; // green
+  //   if (healthScore >= 40) return "#eab308"; // yellow
+  //   return "#ef4444"; // red
+  // };
   const getBarColor = (healthScore) => {
-    if (healthScore >= 70) return "#22c55e"; // green
-    if (healthScore >= 40) return "#eab308"; // yellow
-    return "#ef4444"; // red
-  };
+  if (healthScore >= 75) return "#22c55e"; // Green - Excellent
+  if (healthScore >= 50) return "#84cc16"; // Lime - Good
+  if (healthScore >= 25) return "#eab308"; // Yellow - Moderate
+  if (healthScore > 0) return "#ef4444"; // red - Poor
+  return "#ef4444"; //Critical
+};
 
   if (loading) {
     return (

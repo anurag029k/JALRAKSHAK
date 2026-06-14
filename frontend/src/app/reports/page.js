@@ -12,8 +12,6 @@ const Reports = () => {
     <div className="space-y-6 flex md:flex-row flex-col">
       <WaterBodyList onWaterBodySelect={setSelectedWaterBodyId}/>
       <BarGraph waterBodyId={selectedWaterBodyId} />
-      {/* <LineGraph /> */}
-      {/* <HeatMap /> */}
     </div>
   )
 }

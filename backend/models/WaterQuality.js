@@ -19,7 +19,7 @@ const waterQualitySchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['healthy', 'moderate', 'critical'],
+    enum: ['excellent', 'good', 'moderate', 'poor', 'critical'],
     default: 'moderate'
   },
   healthScore: {
@@ -47,12 +47,10 @@ const waterQualitySchema = new mongoose.Schema({
   },
   nitrate: {
     type: Number,
-    required: true,
     min: 0
   },
   fecalColiform: {
     type: Number,
-    required: true,
     min: 0
   },
   totalColiform: {
@@ -62,7 +60,6 @@ const waterQualitySchema = new mongoose.Schema({
   },
   temperature: {
     type: Number,
-    required: true
   },
   turbidity: {
     type: Number,

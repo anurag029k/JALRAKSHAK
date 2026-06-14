@@ -29,7 +29,7 @@ export default function DashboardPage() {
     } else if (user.role === 'officer') {
       router.push('/dashboard/officer')
       return
-    } else if (user.role === 'user') {
+    } else if (user.role === 'citizen') {
       router.push('/dashboard/citizen')
       return
     }

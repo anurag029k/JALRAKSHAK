@@ -36,7 +36,8 @@ const Navbar = () => {
           </nav>
           { user ? 
           <div className="flex items-center space-x-3">
-              <Button onClick={handleLogout} variant="outline">Logout</Button>          
+              <Button onClick={handleLogout} variant="outline">Logout</Button>
+              <Button onClick={()=>router.push('/dashboard')}>Dashboard</Button>          
             </div>
 
           : (

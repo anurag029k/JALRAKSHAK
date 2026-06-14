@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import api from "@/lib/axios";
 
 export default function WaterBodyList({ onWaterBodySelect }) {
+  const [data, setData] = useState([]);
+  // const [waterBodyName, setWaterBodyName] = useState("");
   const [waterBodies, setWaterBodies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -15,13 +17,53 @@ export default function WaterBodyList({ onWaterBodySelect }) {
         setWaterBodies(res.data.waterBodies);
       } catch (error) {
         console.error("Error fetching water bodies:", error);
+      } 
+    };
+
+    fetchWaterBodies();
+  }, []);
+
+  useEffect(() => {
+    const fetchTrend = async () => {
+      try {
+        const res = await api.get(
+          `/waterquality`
+        );
+        setData(res.data.records);
+
+      } catch (error) {
+        console.error("Error fetching health trend:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchWaterBodies();
+    fetchTrend();
   }, []);
+//   useEffect(() => {
+//   if (waterBodies.length > 0) {
+//     console.log("First water body:", waterBodies[0]);
+//   }
+// }, [waterBodies]);
+// useEffect(() => {
+//   if (data.length > 0) {
+//     console.log("First quality record:", data[0]);
+//   }
+// }, [data]);
+  const getCurrentQuality = (waterBodyId) => {
+      const currentYear = new Date().getFullYear();
+
+    const currentQuality =
+      data?.find(
+        q => q.year === currentYear && q.waterBodyId._id === waterBodyId
+    )
+    if (currentQuality) return currentQuality;
+
+  return data
+    ?.filter(q => q.waterBodyId._id === waterBodyId)
+    ?.sort((a, b) => b.year - a.year)[0];
+
+  }
 
   const handleSelect = (waterBody) => {
     setSelectedId(waterBody._id);
@@ -29,17 +71,37 @@ export default function WaterBodyList({ onWaterBodySelect }) {
       onWaterBodySelect(waterBody._id);
     }
   };
-
+  // const getStatusColor = (status) => {
+  //   switch (status) {
+  //     case "healthy":
+  //       return "bg-green-100 text-green-800";
+  //     case "moderate":
+  //       return "bg-yellow-100 text-yellow-800";
+  //     case "critical":
+  //       return "bg-red-100 text-red-800";
+  //     default:
+  //       return "bg-gray-100 text-gray-800";
+  //   }
+  // };
   const getStatusColor = (status) => {
     switch (status) {
-      case "healthy":
+      case "excellent":
         return "bg-green-100 text-green-800";
+
+      case "good":
+        return "bg-lime-100 text-lime-800";
+
       case "moderate":
         return "bg-yellow-100 text-yellow-800";
+
+      case "poor":
+        return "bg-red-100 text-red-800";
+
       case "critical":
         return "bg-red-100 text-red-800";
+
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-200 text-gray-800";
     }
   };
 
@@ -62,11 +124,10 @@ export default function WaterBodyList({ onWaterBodySelect }) {
             <div
               key={waterBody._id}
               onClick={() => handleSelect(waterBody)}
-              className={`p-4 rounded-lg cursor-pointer transition-all ${
-                selectedId === waterBody._id
-                  ? "bg-blue-50 border-2 border-blue-500"
-                  : "bg-gray-50 hover:bg-gray-100 border-2 border-transparent"
-              }`}
+              className={`p-4 rounded-lg cursor-pointer transition-all ${selectedId === waterBody._id
+                ? "bg-blue-50 border-2 border-blue-500"
+                : "bg-gray-50 hover:bg-gray-100 border-2 border-transparent"
+                }`}
             >
               <div className="flex justify-between items-start">
                 <div>
@@ -77,13 +138,13 @@ export default function WaterBodyList({ onWaterBodySelect }) {
                 <div className="flex flex-col items-end gap-2">
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(
-                      waterBody.status
+                      getCurrentQuality(waterBody._id)?.status
                     )}`}
                   >
-                    {waterBody.status}
+                    {getCurrentQuality(waterBody._id)?.status || "No Data"}
                   </span>
                   <span className="text-sm font-semibold text-gray-700">
-                    Score: {waterBody.healthScore}
+                    Score: {getCurrentQuality(waterBody._id)?.healthScore || "N/A"}
                   </span>
                 </div>
               </div>

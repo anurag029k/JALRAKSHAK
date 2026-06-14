@@ -35,15 +35,30 @@ import { useEffect, useState } from "react";
 
 export default function Contact() {
   const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(
-      "https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json"
-    )
-      .then((res) => res.json())
-      .then(setData)
-      .catch(console.error);
+    async function fetchData() {
+      try {
+        const res = await fetch("/api/cpcb");
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      }
+    }
+
+    fetchData();
   }, []);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <pre>{JSON.stringify(data, null, 2)}</pre>
