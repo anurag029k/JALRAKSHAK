@@ -27,18 +27,49 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const [statsRes, alertsRes, surveysRes, complaintsRes] = await Promise.all([
-        api.get('/dashboard/stats'),
-        api.get('/dashboard/recent-alerts?limit=5'),
-        api.get('/dashboard/recent-surveys?limit=5'),
-        api.get('/citizen-reports?limit=5')
-      ])
-      setStats(statsRes.data.stats)
-      setRecentAlerts(alertsRes.data.alerts)
-      setRecentSurveys(surveysRes.data.surveys)
-      setRecentComplaints(complaintsRes.data.reports || [])
+      setLoading(true)
+      
+      // Fetch stats
+      try {
+        const statsRes = await api.get('/dashboard/stats')
+        setStats(statsRes.data.stats)
+      } catch (error) {
+        console.error('Stats fetch error:', error)
+        toast.error('Failed to load dashboard statistics: ' + error.response?.data?.message || error.message)
+      }
+
+      // Fetch recent alerts
+      try {
+        const alertsRes = await api.get('/dashboard/recent-alerts?limit=5')
+        setRecentAlerts(alertsRes.data.alerts || [])
+      } catch (error) {
+        console.error('Alerts fetch error:', error)
+        toast.error('Failed to load recent alerts: ' + error.response?.data?.message || error.message)
+        setRecentAlerts([])
+      }
+
+      // Fetch recent surveys
+      try {
+        const surveysRes = await api.get('/dashboard/recent-surveys?limit=5')
+        setRecentSurveys(surveysRes.data.surveys || [])
+      } catch (error) {
+        console.error('Surveys fetch error:', error)
+        toast.error('Failed to load recent surveys: ' + error.response?.data?.message || error.message)
+        setRecentSurveys([])
+      }
+
+      // Fetch recent complaints
+      try {
+        const complaintsRes = await api.get('/citizen-reports?limit=5')
+        setRecentComplaints(complaintsRes.data.reports || [])
+      } catch (error) {
+        console.error('Complaints fetch error:', error)
+        toast.error('Failed to load recent complaints: ' + error.response?.data?.message || error.message)
+        setRecentComplaints([])
+      }
     } catch (error) {
-      toast.error('Failed to load dashboard data')
+      console.error('Dashboard data fetch error:', error)
+      toast.error('An unexpected error occurred while loading dashboard data')
     } finally {
       setLoading(false)
     }

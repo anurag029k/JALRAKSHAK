@@ -25,8 +25,20 @@ export default function ComplaintsPage() {
 
   const fetchComplaints = async () => {
     try {
-      const res = await api.get(`/citizen-reports?status=${filter}`);
+      console.log("Current filter:", filter);
+
+      const url =
+        filter === "all"
+          ? "/citizen-reports"
+          : `/citizen-reports?status=${filter}`;
+
+      console.log("Request URL:", url);
+
+      const res = await api.get(url);
+
+      console.log("Response:", res.data);
       setComplaints(res.data.reports || []);
+
     } catch (error) {
       toast.error("Failed to fetch complaints");
     } finally {
@@ -36,7 +48,7 @@ export default function ComplaintsPage() {
 
   const handleUpdateStatus = async (complaintId, newStatus) => {
     try {
-      await api.put(`/citizen-reports/${complaintId}`, { status: newStatus });
+      await api.put(`/citizen-reports/${complaintId}/verify`, { status: newStatus });
       toast.success("Complaint status updated");
       fetchComplaints();
     } catch (error) {

@@ -13,43 +13,126 @@ export default function ComplaintForm() {
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
+    issueType: "pollution",
     description: "",
     location: "",
     waterBodyId: "",
+    waterBodyName:"",
+    reporterName: user?.name || "",
+    reporterEmail: user?.email || "",
+    reporterPhone: "",
+    images: [],
     isAnonymous: !user, // Default to anonymous if not logged in
-    image: null,
   });
+
+  const compressImage = (file, callback) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        // Resize if image is too large
+        const maxWidth = 1200;
+        const maxHeight = 1200;
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Compress to JPEG with quality 0.7
+        canvas.toBlob(
+          (blob) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onload = (e) => callback(e.target.result);
+          },
+          "image/jpeg",
+          0.7
+        );
+      };
+    };
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    const maxFileSize = 2 * 1024 * 1024; // 2MB per image
+    const maxTotalSize = 10 * 1024 * 1024; // 10MB total
+
+    let totalSize = formData.images.reduce((acc, img) => acc + img.length, 0);
+
+    files.forEach((file) => {
+      if (file.size > maxFileSize) {
+        toast.error(`Image "${file.name}" is too large (max 2MB). It will be compressed.`);
+      }
+
+      compressImage(file, (compressedImage) => {
+        totalSize += compressedImage.length;
+
+        if (totalSize > maxTotalSize) {
+          toast.error("Total image size exceeds 10MB limit. Please remove some images.");
+          return;
+        }
+
+        setFormData((prev) => ({
+          ...prev,
+          images: [...prev.images, compressedImage],
+        }));
+      });
+    });
+  };
+
+  const removeImage = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const data = new FormData();
-      data.append("title", formData.title);
-      data.append("description", formData.description);
-      data.append("location", formData.location);
-      if (formData.waterBodyId) {
-        data.append("waterBodyId", formData.waterBodyId);
-      }
-      data.append("isAnonymous", formData.isAnonymous);
-      if (formData.image) {
-        data.append("image", formData.image);
-      }
-      if (user) {
-        data.append("reporterId", user._id);
-        data.append("reporterName", user.name);
-      }
+      const payload = {
+        issueType: formData.issueType,
+        description: formData.description,
+        location: formData.location,
+        waterBodyId: formData.waterBodyId || null,
+        waterBodyName: formData.waterBodyName || null,
+        images: formData.images,
+      };
 
-      await api.post("/citizen-reports", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      if (!formData.isAnonymous && user) {
+        payload.reporterName = formData.reporterName;
+        payload.reporterEmail = formData.reporterEmail;
+        payload.reporterPhone = formData.reporterPhone;
+      }
+      console.log(
+        "Payload size:",
+        JSON.stringify(payload).length / 1024 / 1024,
+        "MB"
+      );
+      await api.post("/citizen-reports", payload);
 
       toast.success("Complaint submitted successfully");
-      router.push("/dashboard/citizen");
+      router.push(user ? "/dashboard/citizen" : "/");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to submit complaint");
     } finally {
@@ -72,18 +155,23 @@ export default function ComplaintForm() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Title *
+                Issue Type *
               </label>
-              <input
-                type="text"
+              <select
                 required
-                value={formData.title}
+                value={formData.issueType}
                 onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
+                  setFormData({ ...formData, issueType: e.target.value })
                 }
-                placeholder="Brief title of the complaint"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              >
+                <option value="pollution">Pollution</option>
+                <option value="encroachment">Encroachment</option>
+                <option value="waste_dumping">Waste Dumping</option>
+                <option value="sewage">Sewage</option>
+                <option value="drying">Drying</option>
+                <option value="other">Other</option>
+              </select>
             </div>
 
             <div>
@@ -124,28 +212,107 @@ export default function ComplaintForm() {
               </label>
               <input
                 type="text"
-                value={formData.waterBodyId}
+                value={formData.waterBodyName}
                 onChange={(e) =>
-                  setFormData({ ...formData, waterBodyId: e.target.value })
+                  setFormData({ ...formData, waterBodyName: e.target.value })
                 }
-                placeholder="Name of the water body if known"
+                placeholder="ID of the water body if known"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Supporting Image (Optional)
+                Upload Images (Optional)
               </label>
               <input
                 type="file"
+                multiple
                 accept="image/*"
-                onChange={(e) =>
-                  setFormData({ ...formData, image: e.target.files[0] })
-                }
+                onChange={handleImageChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              <p className="text-xs text-gray-500 mt-1">
+                Upload multiple images (max 2MB each, 10MB total).
+              </p>
+
+              {formData.images.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">
+                    Uploaded Images ({formData.images.length})
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {formData.images.map((image, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={image}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-24 object-cover rounded-md border border-gray-200"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+
+            {!formData.isAnonymous && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Your Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.reporterName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, reporterName: e.target.value })
+                    }
+                    placeholder="Your full name"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.reporterEmail}
+                    onChange={(e) =>
+                      setFormData({ ...formData, reporterEmail: e.target.value })
+                    }
+                    placeholder="Your email address"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone (Optional)
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.reporterPhone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, reporterPhone: e.target.value })
+                    }
+                    placeholder="Your phone number"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </>
+            )}
 
             {user && (
               <div className="flex items-center gap-2">
@@ -168,9 +335,10 @@ export default function ComplaintForm() {
               <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-md">
                 <p className="text-sm">
                   You are submitting as a guest. Your complaint will be anonymous.
-                  <a href="/login" className="underline ml-2">
-                    Login to track your complaint status
+                  <a href="/login" className="underline ml-1 mr-1">
+                    Login to track your complaint status.
                   </a>
+                  If you submit your complaint without login you can't track your complaint status.
                 </p>
               </div>
             )}

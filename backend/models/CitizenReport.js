@@ -5,19 +5,20 @@ const citizenReportSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'WaterBody'
   },
+  waterBodyName: {
+    type: String, 
+    trim: true
+  },
   reporterName: {
     type: String,
-    required: true,
     trim: true
   },
   reporterEmail: {
     type: String,
-    required: true,
     trim: true
   },
   reporterPhone: {
     type: String,
-    required: true,
     trim: true
   },
   issueType: {

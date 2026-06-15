@@ -9,7 +9,7 @@ const router = express.Router();
 // @access  Private
 router.get('/', protect, async (req, res) => {
   try {
-    const { status, waterBodyId } = req.query;
+    const { status, waterBodyId, limit = 10 } = req.query;
     const query = {};
 
     if (status) query.status = status;
@@ -18,17 +18,19 @@ router.get('/', protect, async (req, res) => {
     const reports = await CitizenReport.find(query)
       .populate('waterBodyId', 'name district')
       .populate('verifiedBy', 'name')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .limit(parseInt(limit));
 
     res.json({
       success: true,
       count: reports.length,
-      reports
+      reports: reports || []
     });
   } catch (error) {
+    console.error('Citizen reports fetch error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to fetch citizen reports'
     });
   }
 });

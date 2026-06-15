@@ -61,10 +61,10 @@ export default function Home() {
               <h4 className="font-semibold">Map Visualization</h4>
               <p className="mt-2 text-sm text-slate-600">Interactive map with status markers and historical trends.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <Link href="/complaints/new" className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow cursor-pointer">
               <h4 className="font-semibold">Community Reporting</h4>
               <p className="mt-2 text-sm text-slate-600">Report pollution or issues and contribute to monitoring efforts.</p>
-            </div>
+            </Link>
           </div>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white rounded-lg shadow p-4">
@@ -75,10 +75,10 @@ export default function Home() {
               <h4 className="font-semibold">Map Visualization</h4>
               <p className="mt-2 text-sm text-slate-600">Interactive map with status markers and historical trends.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <Link href="/complaints/new" className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow cursor-pointer">
               <h4 className="font-semibold">Community Reporting</h4>
               <p className="mt-2 text-sm text-slate-600">Report pollution or issues and contribute to monitoring efforts.</p>
-            </div>
+            </Link>
           </div>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white rounded-lg shadow p-4">
@@ -89,10 +89,10 @@ export default function Home() {
               <h4 className="font-semibold">Map Visualization</h4>
               <p className="mt-2 text-sm text-slate-600">Interactive map with status markers and historical trends.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <Link href="/complaints/new" className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow cursor-pointer">
               <h4 className="font-semibold">Community Reporting</h4>
               <p className="mt-2 text-sm text-slate-600">Report pollution or issues and contribute to monitoring efforts.</p>
-            </div>
+            </Link>
           </div>
         </div>
 

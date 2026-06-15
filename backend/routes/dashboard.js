@@ -37,9 +37,10 @@ router.get('/stats', protect, async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Dashboard stats error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to fetch dashboard statistics'
     });
   }
 });
@@ -90,12 +91,13 @@ router.get('/recent-alerts', protect, async (req, res) => {
 
     res.json({
       success: true,
-      alerts
+      alerts: alerts || []
     });
   } catch (error) {
+    console.error('Dashboard recent alerts error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to fetch recent alerts'
     });
   }
 });
@@ -114,12 +116,13 @@ router.get('/recent-surveys', protect, async (req, res) => {
 
     res.json({
       success: true,
-      surveys
+      surveys: surveys || []
     });
   } catch (error) {
+    console.error('Dashboard recent surveys error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to fetch recent surveys'
     });
   }
 });
