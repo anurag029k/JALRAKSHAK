@@ -172,8 +172,42 @@ function checkAlertThresholds(waterBody, qualityData) {
   return alerts;
 }
 
+function mergeThresholdAlerts(alerts, qualityRecord) {
+  if (!Array.isArray(alerts) || alerts.length === 0) {
+    return null;
+  }
+
+  const severityOrder = { low: 1, medium: 2, high: 3, critical: 4 };
+  let mergedSeverity = 'low';
+  const parameters = {};
+  const messages = [];
+
+  alerts.forEach((alert) => {
+    if (alert.severity && severityOrder[alert.severity] > severityOrder[mergedSeverity]) {
+      mergedSeverity = alert.severity;
+    }
+    if (alert.parameters) {
+      Object.assign(parameters, alert.parameters);
+    }
+    if (alert.message) {
+      messages.push(alert.message.replace(/\.$/, ''));
+    }
+  });
+
+  return {
+    waterBodyId: alerts[0].waterBodyId,
+    waterBodyName: alerts[0].waterBodyName,
+    type: 'pollution',
+    severity: mergedSeverity,
+    message: messages,
+    parameters,
+    timestamp: qualityRecord.date || new Date()
+  };
+}
+
 module.exports = {
   calculateHealthScore,
   getStatusFromHealthScore,
-  checkAlertThresholds
+  checkAlertThresholds,
+  mergeThresholdAlerts
 };

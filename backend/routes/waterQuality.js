@@ -3,7 +3,7 @@ const WaterQuality = require('../models/WaterQuality');
 const WaterBody = require('../models/WaterBody');
 const Alert = require('../models/Alert');
 const { protect, authorize } = require('../middleware/auth');
-const { calculateHealthScore, getStatusFromHealthScore, checkAlertThresholds } = require('../utils/healthScore');
+const { calculateHealthScore, getStatusFromHealthScore, checkAlertThresholds, mergeThresholdAlerts } = require('../utils/healthScore');
 
 const router = express.Router();
 
@@ -93,18 +93,20 @@ router.post('/', protect, authorize('admin', 'officer'), async (req, res) => {
 
     // Check for alerts
     const waterBody = await WaterBody.findById(record.waterBodyId);
-    const alerts = checkAlertThresholds(waterBody, record);
+    const thresholdAlerts = checkAlertThresholds(waterBody, record);
+    const mergedAlert = mergeThresholdAlerts(thresholdAlerts, record);
+    let alertsGenerated = 0;
 
-    // Create alerts if thresholds exceeded
-    for (const alertData of alerts) {
-      await Alert.create(alertData);
+    if (mergedAlert) {
+      await Alert.create(mergedAlert);
+      alertsGenerated = 1;
     }
 
     res.status(201).json({
       success: true,
       record,
       healthScore,
-      alertsGenerated: alerts.length
+      alertsGenerated
     });
   } catch (error) {
     res.status(500).json({

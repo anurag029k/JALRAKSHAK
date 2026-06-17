@@ -21,6 +21,10 @@ const citizenReportSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  title:{
+    type: String,
+    trim: true
+  },
   issueType: {
     type: String,
     enum: ['pollution', 'encroachment', 'waste_dumping', 'sewage', 'drying', 'other'],

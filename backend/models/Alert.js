@@ -10,6 +10,7 @@ const alertSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+
   type: {
     type: String,
     enum: ['pollution', 'low_oxygen', 'contamination', 'encroachment', 'drying'],
@@ -20,10 +21,9 @@ const alertSchema = new mongoose.Schema({
     enum: ['low', 'medium', 'high', 'critical'],
     required: true
   },
-  message: {
-    type: String,
-    required: true
-  },
+  message: [{
+    type: String
+  }],
   parameters: {
     type: mongoose.Schema.Types.Mixed
   },

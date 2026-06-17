@@ -28,7 +28,7 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true)
-      
+
       // Fetch stats
       try {
         const statsRes = await api.get('/dashboard/stats')
@@ -41,6 +41,7 @@ export default function AdminDashboard() {
       // Fetch recent alerts
       try {
         const alertsRes = await api.get('/dashboard/recent-alerts?limit=5')
+        console.log(alertsRes.data)
         setRecentAlerts(alertsRes.data.alerts || [])
       } catch (error) {
         console.error('Alerts fetch error:', error)
@@ -202,6 +203,20 @@ export default function AdminDashboard() {
               <p className="text-sm text-gray-600">Access analytics and reports</p>
             </CardContent>
           </Card>
+
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/alerts')}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Manage Alerts
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600">View and manage alerts</p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Recent Complaints */}
@@ -221,11 +236,10 @@ export default function AdminDashboard() {
                       <p className="text-sm text-gray-600">{complaint.description?.substring(0, 50)}...</p>
                       <p className="text-xs text-gray-500">By: {complaint.isAnonymous ? 'Anonymous' : complaint.reporterName || 'Unknown'}</p>
                     </div>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      complaint.status === 'resolved' ? 'bg-green-100 text-green-800' :
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${complaint.status === 'resolved' ? 'bg-green-100 text-green-800' :
                       complaint.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
+                        'bg-red-100 text-red-800'
+                      }`}>
                       {complaint.status || 'pending'}
                     </span>
                   </div>
@@ -249,13 +263,17 @@ export default function AdminDashboard() {
                   <div key={alert._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div>
                       <p className="font-medium text-gray-900">{alert.waterBodyName}</p>
-                      <p className="text-sm text-gray-600">{alert.message}</p>
+                      {alert.message.map((message, index) => (
+                        
+                        <p key={index} className="text-sm text-gray-600">
+                          {message}
+                        </p>
+                      ))}
                     </div>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      alert.severity === 'critical' ? 'bg-red-100 text-red-800' :
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${alert.severity === 'critical' ? 'bg-red-100 text-red-800' :
                       alert.severity === 'high' ? 'bg-orange-100 text-orange-800' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
+                        'bg-yellow-100 text-yellow-800'
+                      }`}>
                       {alert.severity}
                     </span>
                   </div>

@@ -79,7 +79,7 @@ export default function ComplaintsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center m-2">
         <h2 className="text-2xl font-bold">Complaint Management</h2>
         <div className="flex gap-2">
           <select
@@ -139,10 +139,10 @@ export default function ComplaintsPage() {
                     </span>
                   </div>
 
-                  {complaint.image && (
+                  {complaint.images && (
                     <div className="mt-3">
                       <img
-                        src={complaint.image}
+                        src={complaint.images}
                         alt="Complaint evidence"
                         className="h-32 w-auto rounded"
                       />

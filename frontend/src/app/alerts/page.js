@@ -89,7 +89,7 @@ export default function AlertsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-screen overflow-y-auto">
         <Card>
           <CardHeader>
             <CardTitle>All Alerts ({alerts.length})</CardTitle>
@@ -98,7 +98,7 @@ export default function AlertsPage() {
             {alerts.length === 0 ? (
               <p className="text-sm text-gray-500">No alerts found</p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-4 h-3xl">
                 {alerts.map((alert) => (
                   <div
                     key={alert._id}
@@ -120,7 +120,9 @@ export default function AlertsPage() {
                           )}
                         </div>
                         <h3 className="font-semibold text-gray-900">{alert.waterBodyName}</h3>
-                        <p className="text-sm text-gray-600 mt-1">{alert.message}</p>
+                        {alert.message.map((msg, idx) => (
+                          <p key={idx} className="text-sm text-gray-600 mt-1">{msg}</p>
+                        ))}
                         <p className="text-xs text-gray-500 mt-2">
                           {new Date(alert.timestamp).toLocaleString()}
                         </p>

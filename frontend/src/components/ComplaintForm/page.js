@@ -13,6 +13,7 @@ export default function ComplaintForm() {
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    title: "",
     issueType: "pollution",
     description: "",
     location: "",
@@ -111,6 +112,7 @@ export default function ComplaintForm() {
 
     try {
       const payload = {
+        title: formData.title || null,
         issueType: formData.issueType,
         description: formData.description,
         location: formData.location,
@@ -153,6 +155,18 @@ export default function ComplaintForm() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+                placeholder="Add a title"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Issue Type *
@@ -216,7 +230,7 @@ export default function ComplaintForm() {
                 onChange={(e) =>
                   setFormData({ ...formData, waterBodyName: e.target.value })
                 }
-                placeholder="ID of the water body if known"
+                placeholder="WaterBody Name if known"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

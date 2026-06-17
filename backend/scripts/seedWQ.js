@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const WaterBody = require('../models/WaterBody');
 const WaterQuality = require('../models/WaterQuality');
-const { getStatusFromHealthScore, calculateHealthScore } = require('../utils/healthScore');
+const { getStatusFromHealthScore, calculateHealthScore,  } = require('../utils/healthScore');
 
 function randomBetween(min, max, decimals = 2) {
   return Number((Math.random() * (max - min) + min).toFixed(decimals));
