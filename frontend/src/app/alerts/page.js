@@ -89,7 +89,7 @@ export default function AlertsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-screen overflow-y-auto">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-screen overflow-y-auto ">
         <Card>
           <CardHeader>
             <CardTitle>All Alerts ({alerts.length})</CardTitle>
@@ -98,7 +98,7 @@ export default function AlertsPage() {
             {alerts.length === 0 ? (
               <p className="text-sm text-gray-500">No alerts found</p>
             ) : (
-              <div className="space-y-4 h-3xl">
+              <div className="space-y-4 h-3xl grid grid-cols-2 gap-2">
                 {alerts.map((alert) => (
                   <div
                     key={alert._id}
