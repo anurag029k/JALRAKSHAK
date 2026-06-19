@@ -183,9 +183,19 @@ const seedData = async () => {
         if (!name || name === 'null' || name === 'undefined' || name.trim() === '') {
           return;
         }
-        if (lat == null || lon == null || Number.isNaN(lat) || Number.isNaN(lon)) {
-          return;
-        }
+        if (
+  lat == null ||
+  lon == null ||
+  Number.isNaN(lat) ||
+  Number.isNaN(lon) ||
+  lat < -90 ||
+  lat > 90 ||
+  lon < -180 ||
+  lon > 180
+) {
+  console.log(`Skipping invalid coordinates: ${name} (${lat}, ${lon})`);
+  return;
+}
         const allowedCategories = ['lake', 'pond', 'wetland', 'reservoir', 'river'];
         if (!category || !allowedCategories.includes(category)) {
           category = 'lake';
@@ -246,18 +256,22 @@ const seedData = async () => {
     if (waterBodies.length) {
       console.log('Sample water body:');
       console.log(JSON.stringify(waterBodies[0], null, 2));
+      let insertedCount = 0;
       try {
-        await WaterBody.insertMany(
-          waterBodies,
-          { ordered: false }
-        );
+        const result = await WaterBody.insertMany(waterBodies, { ordered: false });
+        insertedCount = result.length;
       } catch (err) {
-        console.error('insertMany error:', err.message);
-        if (err.writeErrors) {
+        insertedCount = err.insertedDocs?.length ?? 0;
+        const failedCount = err.writeErrors?.length ?? 0;
+        if (failedCount) {
+          console.error(`Failed to insert ${failedCount} water bodies`);
           console.error('First 5 write errors:', err.writeErrors.slice(0, 5).map(e => e.errmsg || e.message));
+        } else {
+          console.error('insertMany error:', err.message);
         }
       }
-      console.log(`Created ${waterBodies.length} water bodies from Excel`);
+      console.log(`Parsed ${waterBodies.length} water bodies from Excel`);
+      console.log(`Inserted ${insertedCount} water bodies into database`);
       const finalCount = await WaterBody.countDocuments();
       console.log('Water bodies in database now:', finalCount);
     } else {

@@ -2,7 +2,7 @@ import React from 'react'
 
 const RealTimeMap = () => {
   return (
-    <div className="min-h-screen bg-slate-50 py-8">
+    <div className=" geomap min-h-screen bg-slate-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <h1 className="text-3xl font-semibold text-slate-900">Real-Time Monitoring Map</h1>
@@ -22,7 +22,7 @@ const RealTimeMap = () => {
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.5fr_1fr] items-start">
           <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-3xl bg-white p-5 shadow-sm border border-slate-200">
+            <div className="rounded-3xl bg-blue-100 p-5 shadow-sm border border-slate-200">
               <div className="flex items-center gap-3">
                 <span className="inline-flex h-3.5 w-3.5 rounded-full bg-emerald-500" />
                 <div>
@@ -32,7 +32,7 @@ const RealTimeMap = () => {
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white p-5 shadow-sm border border-slate-200">
+            <div className="rounded-3xl bg-blue-100 p-5 shadow-sm border border-slate-200">
               <div className="flex items-center gap-3">
                 <span className="inline-flex h-3.5 w-3.5 rounded-full bg-sky-500" />
                 <div>
@@ -42,7 +42,7 @@ const RealTimeMap = () => {
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white p-5 shadow-sm border border-slate-200">
+            <div className="rounded-3xl bg-blue-100 p-5 shadow-sm border border-slate-200">
               <div className="flex items-center gap-3">
                 <span className="inline-flex h-3.5 w-3.5 rounded-full bg-amber-500" />
                 <div>
@@ -52,7 +52,7 @@ const RealTimeMap = () => {
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white p-5 shadow-sm border border-slate-200">
+            <div className="rounded-3xl bg-blue-100 p-5 shadow-sm border border-slate-200">
               <div className="flex items-center gap-3">
                 <span className="inline-flex h-3.5 w-3.5 rounded-full bg-rose-500" />
                 <div>
@@ -63,7 +63,7 @@ const RealTimeMap = () => {
             </div>
           </div>
 
-          <div className="rounded-3xl bg-white p-6 shadow-sm border border-slate-200">
+          <div className="rounded-3xl bg-blue-100 p-6 shadow-sm border border-slate-200">
             <h2 className="text-lg font-semibold text-slate-900">Map Legend</h2>
             <p className="mt-2 text-sm text-slate-600">Use the legend to interpret water body health and status markers on the map.</p>
             <div className="mt-5 space-y-4">

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const WaterBody = require('../models/WaterBody');
 const WaterQuality = require('../models/WaterQuality');
-const { getStatusFromHealthScore, calculateHealthScore,  } = require('../utils/healthScore');
+const { getWaterQualityStatusFromHealthScore, calculateHealthScore } = require('../utils/healthScore');
 
 function randomBetween(min, max, decimals = 2) {
   return Number((Math.random() * (max - min) + min).toFixed(decimals));
@@ -23,7 +23,7 @@ function generateYrWiseData(waterBodies){
            conductivity: randomBetween(100, 2000),   // µS/cm
         }
         const healthScore = calculateHealthScore(quality);
-        const status = getStatusFromHealthScore(healthScore);
+        const status = getWaterQualityStatusFromHealthScore(healthScore);
 
          qualityData.push({
            waterBodyId: waterBody._id,

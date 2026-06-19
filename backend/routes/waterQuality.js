@@ -3,7 +3,13 @@ const WaterQuality = require('../models/WaterQuality');
 const WaterBody = require('../models/WaterBody');
 const Alert = require('../models/Alert');
 const { protect, authorize } = require('../middleware/auth');
-const { calculateHealthScore, getStatusFromHealthScore, checkAlertThresholds, mergeThresholdAlerts } = require('../utils/healthScore');
+const {
+  calculateHealthScore,
+  getStatusFromHealthScore,
+  getWaterQualityStatusFromHealthScore,
+  checkAlertThresholds,
+  mergeThresholdAlerts
+} = require('../utils/healthScore');
 
 const router = express.Router();
 
@@ -76,17 +82,17 @@ router.post('/', protect, authorize('admin', 'officer'), async (req, res) => {
     // Calculate health score
     const healthScore = calculateHealthScore(qualityData);
     
-    // Update water body health score and status
-    const status = getStatusFromHealthScore(healthScore);
+    const waterBodyStatus = getStatusFromHealthScore(healthScore);
+    const qualityStatus = getWaterQualityStatusFromHealthScore(healthScore);
     qualityData.healthScore = healthScore;
-    qualityData.status = status;
+    qualityData.status = qualityStatus;
     const record = await WaterQuality.create(qualityData);
     
     await WaterBody.findByIdAndUpdate(
       record.waterBodyId,
       {
         healthScore,
-        status,
+        status: waterBodyStatus,
         lastQualityCheck: new Date()
       }
     );

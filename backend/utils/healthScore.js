@@ -88,6 +88,12 @@ function calculateDOSaturation(tempC = 25) {
 }
 
 function getStatusFromHealthScore(healthScore = 0) {
+  if (healthScore >= 50) return 'healthy';
+  if (healthScore >= 25) return 'moderate';
+  return 'critical';
+}
+
+function getWaterQualityStatusFromHealthScore(healthScore = 0) {
   if (healthScore >= 75) return 'excellent';
   if (healthScore >= 50) return 'good';
   if (healthScore >= 25) return 'moderate';
@@ -208,6 +214,7 @@ function mergeThresholdAlerts(alerts, qualityRecord) {
 module.exports = {
   calculateHealthScore,
   getStatusFromHealthScore,
+  getWaterQualityStatusFromHealthScore,
   checkAlertThresholds,
   mergeThresholdAlerts
 };

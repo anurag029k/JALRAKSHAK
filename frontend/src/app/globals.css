@@ -69,3 +69,9 @@
  background-position: center;
  background-repeat: no-repeat;
 }
+.geomap {
+  background-image: url("/images/geo-bg.jpeg");
+  background-size: fill;
+  background-position: center;
+  
+}

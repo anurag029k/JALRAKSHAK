@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <div className="home bg-gradient-to-r from-blue-600 via-gray-700 to-cyan-400">
       <HeroSlider/>
-      <div className='rounded-lg bg-white shadow p-3 sm:p-4 mt-5 max-w-[1220px] m-auto hover:bg-white/30'>
+      <div className='rounded-lg bg-white shadow p-3 sm:p-4 mt-5 max-w-[1220px] m-auto hover:bg-white/50  '>
        <h2 className='font-bold text-3xl text-center justify-center m-auto'>Key Features</h2>
       </div>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8 items-start mt-3">
@@ -53,47 +53,41 @@ export default function Home() {
           
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg shadow p-4">
-              <h4 className="font-semibold">Real-Time Data</h4>
-              <p className="mt-2 text-sm text-slate-600">Sensor feeds and continuous readings for water quality parameters.</p>
+            <div className="bg-white rounded-lg shadow p-4 hover:bg-white/50">
+              <h4 className="font-semibold">📈 Real-Time Data</h4>
+              <p className="mt-2 text-sm text-slate-600">Monitors pollution levels and generates real-time alerts for faster environmental response.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
-              <h4 className="font-semibold">Map Visualization</h4>
-              <p className="mt-2 text-sm text-slate-600">Interactive map with status markers and historical trends.</p>
-            </div>
-            <Link href="/complaints/new" className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow cursor-pointer">
-              <h4 className="font-semibold">Community Reporting</h4>
+            <Link href="/geomap" className="bg-white rounded-lg shadow p-4 hover:bg-white/50 hover:shadow-lg transition-shadow cursor-pointer">
+              <h4 className="font-semibold">🗺️ GIS-Based Survey Map Portal</h4>
+              <p className="mt-2 text-sm text-slate-600">Real-time visualization and monitoring of Delhi's water bodies on an interactive map.</p>
+            </Link>
+            <Link href="/complaints/new" className="bg-white rounded-lg shadow p-4 hover:bg-white/50 hover:shadow-lg transition-shadow cursor-pointer">
+              <h4 className="font-semibold">👥 Community Reporting</h4>
               <p className="mt-2 text-sm text-slate-600">Report pollution or issues and contribute to monitoring efforts.</p>
             </Link>
           </div>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg shadow p-4">
-              <h4 className="font-semibold">Real-Time Data</h4>
-              <p className="mt-2 text-sm text-slate-600">Sensor feeds and continuous readings for water quality parameters.</p>
+            <div className="bg-white rounded-lg shadow p-4 hover:bg-white/50">
+              <h4 className="font-semibold">📋 Digital Survey Management</h4>
+              <p className="mt-2 text-sm text-slate-600">Field officers can submit surveys, observations, and geo-tagged photographs digitally.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
-              <h4 className="font-semibold">Map Visualization</h4>
-              <p className="mt-2 text-sm text-slate-600">Interactive map with status markers and historical trends.</p>
+
+            <div className="bg-white rounded-lg shadow p-4 hover:bg-white/50">
+              <h4 className="font-semibold">🚨 Smart Alert System</h4>
+              <p className="mt-2 text-sm text-slate-600">Generates real-time alerts for pollution, contamination, encroachment, and critical water conditions.</p>
             </div>
-            <Link href="/complaints/new" className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow cursor-pointer">
-              <h4 className="font-semibold">Community Reporting</h4>
-              <p className="mt-2 text-sm text-slate-600">Report pollution or issues and contribute to monitoring efforts.</p>
+
+            
+
+            <Link href="/ai-analysis" className="bg-white rounded-lg shadow p-4 hover:bg-white/50 hover:shadow-lg transition-shadow cursor-pointer">
+              <h4 className="font-semibold">🤖 AI-Powered Pollution Detection</h4>
+              <p className="mt-2 text-sm text-slate-600">Analyzes uploaded images to detect garbage, plastic waste, sewage, and surface pollution.</p>
             </Link>
+            
+          
+            
           </div>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg shadow p-4">
-              <h4 className="font-semibold">Real-Time Data</h4>
-              <p className="mt-2 text-sm text-slate-600">Sensor feeds and continuous readings for water quality parameters.</p>
-            </div>
-            <div className="bg-white rounded-lg shadow p-4">
-              <h4 className="font-semibold">Map Visualization</h4>
-              <p className="mt-2 text-sm text-slate-600">Interactive map with status markers and historical trends.</p>
-            </div>
-            <Link href="/complaints/new" className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow cursor-pointer">
-              <h4 className="font-semibold">Community Reporting</h4>
-              <p className="mt-2 text-sm text-slate-600">Report pollution or issues and contribute to monitoring efforts.</p>
-            </Link>
-          </div>
+          
         </div>
 
         
