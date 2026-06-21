@@ -64,7 +64,12 @@ const seedData = async () => {
     let waterBodies = [];
     try {
       const workbook = xlsx.readFile(excelPath);
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+console.log("Sheet Names:", workbook.SheetNames);
+
+const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+console.log("Sheet Range:", sheet['!ref']);
       const raw = xlsx.utils.sheet_to_json(sheet, { header: 1, defval: null });
       console.log('Total sheet rows:', raw.length);
 
@@ -104,6 +109,8 @@ const seedData = async () => {
         return obj;
       });
       console.log('Parsed data rows:', rows.length);
+      let skippedCoords = 0;
+      let skippedName = 0;
 
       const findKey = (objKeys, candidates) => {
         const lower = objKeys.map(k => k.toLowerCase());
@@ -181,8 +188,9 @@ const seedData = async () => {
         const description = descKey && row[descKey] ? String(row[descKey]) : null;
 
         if (!name || name === 'null' || name === 'undefined' || name.trim() === '') {
-          return;
-        }
+  skippedName++;
+  return;
+} 
         if (
   lat == null ||
   lon == null ||
@@ -193,6 +201,7 @@ const seedData = async () => {
   lon < -180 ||
   lon > 180
 ) {
+  skippedCoords++;
   console.log(`Skipping invalid coordinates: ${name} (${lat}, ${lon})`);
   return;
 }
@@ -243,6 +252,15 @@ const seedData = async () => {
           description: description || ''
         });
       });
+      console.log('Total rows in Excel:', rows.length);
+console.log('Skipped due to missing name:', skippedName);
+console.log('Skipped due to invalid coordinates:', skippedCoords);
+console.log('Valid water bodies created:', waterBodies.length);
+
+if (waterBodies.length === 0) {
+   console.warn('No valid water bodies found in Excel, seeding sample defaults');
+   waterBodies = [];
+}
 
       if (waterBodies.length === 0) {
         console.warn('No valid water bodies found in Excel, seeding sample defaults');
