@@ -23,23 +23,35 @@ export default function OfficerDashboard() {
     }
     fetchDashboardData()
   }, [user, router, hasRole])
+  
 
   const fetchDashboardData = async () => {
-    try {
-      const [statsRes, surveysRes, alertsRes] = await Promise.all([
-        api.get('/dashboard/stats'),
-        api.get('/surveys?officerId=' + user._id + '&limit=5'),
-        api.get('/dashboard/recent-alerts?limit=5')
-      ])
-      setStats(statsRes.data.stats)
-      setMySurveys(surveysRes.data.surveys || [])
-      setRecentAlerts(alertsRes.data.alerts)
-    } catch (error) {
-      toast.error('Failed to load dashboard data')
-    } finally {
-      setLoading(false)
+  try {
+    console.log("User Object:", user);
+
+    const officerId = user?.id || user?._id;
+
+    if (!officerId) {
+      console.error("Officer ID is missing");
+      return;
     }
+
+    const [statsRes, surveysRes, alertsRes] = await Promise.all([
+      api.get('/dashboard/stats'),
+      api.get(`/surveys?officerId=${officerId}&limit=5`),
+      api.get('/dashboard/recent-alerts?limit=5')
+    ]);
+
+    setStats(statsRes.data.stats);
+    setMySurveys(surveysRes.data.surveys || []);
+    setRecentAlerts(alertsRes.data.alerts);
+
+  } catch (error) {
+    console.error("Dashboard Error:", error);
+  } finally {
+    setLoading(false);
   }
+};
 
   if (loading) {
     return (

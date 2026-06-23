@@ -64,9 +64,9 @@
   border: none !important;
 }
 .home{
-  background-image: url("/images/bg3.jpeg");
- background-size: cover;
- background-position: center;
+  background-image: url("/images/bg4.jpeg");
+ background-size: 100% 61%;
+ background-position: bottom;
  background-repeat: no-repeat;
 }
 .geomap {
@@ -74,4 +74,10 @@
   background-size: fill;
   background-position: center;
   
+}
+.about{
+  background-image: url("/images/bg4.jpeg");
+ background-size: cover;
+ background-position: center;
+ background-repeat: no-repeat;
 }
