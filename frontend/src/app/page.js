@@ -23,7 +23,7 @@ const HeatMap = dynamic(() => import('@/components/HeatMap/page'), {
 
 export default function Home() {
   return (
-    <div className="bg-slate-100">
+    <div className=" home bg-slate-100">
 
       {/* Hero Section */}
       <HeroSlider />
@@ -232,16 +232,7 @@ export default function Home() {
               href="/register"
               className="px-6 py-3 border border-white rounded-md hover:bg-white/10"
             >
-              Register
-            </Link>
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </div>
+              
   )
 }
 
