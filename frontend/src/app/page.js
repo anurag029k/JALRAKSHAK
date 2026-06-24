@@ -232,7 +232,16 @@ export default function Home() {
               href="/register"
               className="px-6 py-3 border border-white rounded-md hover:bg-white/10"
             >
-              
+              Register
+            </Link>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
   )
 }
 
